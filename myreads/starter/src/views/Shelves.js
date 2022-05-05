@@ -1,7 +1,7 @@
-import Shelf from "../Components/Shelf.js";
+import Shelf from "../Components/Shelf";
 import { Link } from "react-router-dom";
 
-const Shelves = ({deleteBook, currentlyReading, updateCurrentlyReading, wantToRead, updateWantToRead, read, updateRead, currentShelf, updateCurrentShelf}) => {
+const Shelves = ({updateBooks, books, deleteBook, currentlyReading, updateCurrentlyReading, wantToRead, updateWantToRead, read, updateRead, currentShelf, updateCurrentShelf}) => {
     return(    
         <div className="app">
             <div className="list-books">
@@ -10,30 +10,36 @@ const Shelves = ({deleteBook, currentlyReading, updateCurrentlyReading, wantToRe
                 </div>
                 <Shelf 
                     name="Currently Reading"
-                    currentShelf={currentShelf}
-                    updateCurrentShelf={() => updateCurrentShelf("currentlyReading")}
+                    //currentShelf={currentShelf}
+                    //updateCurrentShelf={updateCurrentShelf}
+                    updateBooks={updateBooks}
+                    books={books}
                     deleteBook={(book) => deleteBook(book, "currentlyReading")}
-                    updateCurrentlyReading={(value) => updateCurrentlyReading(value)}
-                    updateWantToRead={(value) => updateWantToRead(value)}
-                    updateRead={(value) => updateRead(value)}
+                    updateCurrentlyReading={updateCurrentlyReading}
+                    updateWantToRead={updateWantToRead}
+                    updateRead={updateRead}
                     list={currentlyReading} />
                 <Shelf 
                     name="Want To Read"
-                    currentShelf={currentShelf}
-                    updateCurrentShelf={() => updateCurrentShelf("wantToRead")}
+                    //currentShelf={currentShelf}
+                    //updateCurrentShelf={updateCurrentShelf}
+                    updateBooks={updateBooks}
+                    books={books}
                     deleteBook={(book) => deleteBook(book, "wantToRead")}
-                    updateCurrentlyReading={(value, index) => updateCurrentlyReading(value)}
-                    updateWantToRead={(value) => updateWantToRead(value)}
-                    updateRead={(value) => updateRead(value)}
+                    updateCurrentlyReading={updateCurrentlyReading}
+                    updateWantToRead={updateWantToRead}
+                    updateRead={updateRead}
                     list={wantToRead} /> 
                 <Shelf 
                     name="Read"
-                    currentShelf={currentShelf}
-                    updateCurrentShelf={() => updateCurrentShelf("read")}
+                    //currentShelf={currentShelf}
+                    //updateCurrentShelf={updateCurrentShelf}
+                    updateBooks={updateBooks}
+                    books={books}
                     deleteBook={(book) => deleteBook(book, "read")}
-                    updateCurrentlyReading={(value) => updateCurrentlyReading(value)}
-                    updateWantToRead={(value) => updateWantToRead(value)}
-                    updateRead={(value) => updateRead(value)}
+                    updateCurrentlyReading={updateCurrentlyReading}
+                    updateWantToRead={updateWantToRead}
+                    updateRead={updateRead}
                     list={read} /> 
                 <div className="open-search">
                     <Link to="/search">Add a book</Link>
