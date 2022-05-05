@@ -1,33 +1,41 @@
+import { useState, useEffect } from "react";
+import { update } from "../BooksAPI";
 
 const Book = ({
+  book,
   title,
   authors,
   image,
+  books,
   updateCurrentlyReading,
   updateWantToRead,
   updateRead,
+  updateBooks,
   deleteBook,
-  currentShelf,
-  updateCurrentShelf,
+  //currentShelf,
+  //updateCurrentShelf,
 }) => {
 
+  const [currentShelf, setCurrentShelf] = useState("");
+     
+  useEffect(() => {
+  }, [books])
+
+  const updateCurrentShelf = (shelf) => {
+    setCurrentShelf(shelf)
+    console.log("updateCurrentShelf",currentShelf)
+  }
+
   const selectShelf = (e) => {
-    if (e.target.value === "currentlyReading") {
-      updateCurrentShelf(e.target.value);
-      updateCurrentlyReading();
+    console.log(e.target.value) 
+    const updateShelf = async function () {
+      await update(book, e.target.value)
+      console.log(book)
+      
     }
-    if (e.target.value === "wantToRead") {
-      updateCurrentShelf(e.target.value);
-      updateWantToRead();
-    }
-    if (e.target.value === "read") {
-      updateCurrentShelf(e.target.value);
-      updateRead();
-    }
-    if (e.target.value === "none") {
-      updateCurrentShelf(e.target.value);
-      deleteBook();
-    }
+    updateShelf()
+    updateBooks(book)
+    console.log(book)
   };
 
   return (
@@ -47,28 +55,28 @@ const Book = ({
               <option value="placeholder" disabled>
                 Move to...
               </option>
-              {currentShelf === "none" ? (
+              {book.shelf === "none" ? (
                 <option value="none" selected>
                   None
                 </option>
               ) : (
                 <option value="none">None</option>
               )}
-              {currentShelf === "currentlyReading" ? (
+              {book.shelf === "currentlyReading" ? (
                 <option value="currentlyReading" selected>
                   Currently Reading &#x2713;
                 </option>
               ) : (
                 <option value="currentlyReading">Currently Reading</option>
               )}
-              {currentShelf === "wantToRead" ? (
+              {book.shelf === "wantToRead" ? (
                 <option value="wantToRead" selected>
                   Want to Read &#x2713;
                 </option>
               ) : (
                 <option value="wantToRead">Want to Read</option>
               )}
-              {currentShelf === "read" ? (
+              {book.shelf === "read" ? (
                 <option value="read" selected>
                   Read &#x2713;
                 </option>

@@ -1,6 +1,6 @@
-import Book from "./Book.js";
+import Book from "./Book";
 
-const Shelf = ({name, updateCurrentlyReading, updateWantToRead, updateRead, deleteBook, list, currentShelf, updateCurrentShelf}) => {
+const Shelf = ({updateBooks, books, name, updateCurrentlyReading, updateWantToRead, updateRead, deleteBook, list, currentShelf, updateCurrentShelf}) => {
     
     return(
         <div className="bookshelf">
@@ -8,13 +8,16 @@ const Shelf = ({name, updateCurrentlyReading, updateWantToRead, updateRead, dele
             <div className="bookshelf-books">
                 <ol className="books-grid">
                 {list ? list.map((book) => 
-                <Book   
+                <Book
+                book={book}
                 key={book.id}
                 title={book.title} 
                 authors={book.authors} 
                 image={book.imageLinks.thumbnail}
-                currentShelf={currentShelf}
-                updateCurrentShelf={() => updateCurrentShelf()}
+                //currentShelf={currentShelf}
+                books={books}
+                updateBooks={() => updateBooks(book)}
+                //updateCurrentShelf={() => updateCurrentShelf()}
                 deleteBook={() => deleteBook(book)}
                 updateCurrentlyReading={() => updateCurrentlyReading(book)}
                 updateWantToRead={() => updateWantToRead(book)}
