@@ -3,42 +3,49 @@ import { useEffect, useState } from "react";
 import { search } from "../BooksAPI";
 import Book from "../Components/Book";
 
-const Search = ({deleteBook, books, updateBooks, updateCurrentlyReading, updateWantToRead, updateRead, currentShelf, updateCurrentShelf}) => {
-
-  //get data from api
+const Search = ({ books, updateBooks }) => {
   const [showSearch, setShowSearch] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
   const updateSearchValue = (searchValue) => {
-    setSearchValue(searchValue)
+    setSearchValue(searchValue);
   };
 
   useEffect(() => {
+    const searchAPI = async () => {
+      const response = await search(searchValue, 20);
 
-    let mounted = true;
+      if (response.error) return setShowSearch([]);
 
-    if(searchValue !== ""){
-      search(searchValue, 20)
-      .then(items => {
-        if(mounted) {
-          setShowSearch(items)
+      const booksWithShelves = response.map((searchedBook) => {
+        const savedBook = books.find((book) => book.id === searchedBook.id);
+        if (savedBook) {
+          return {
+            ...searchedBook,
+            shelf: savedBook.shelf,
+          };
         }
-      })
-      .catch((error) => console.log(error))
-    }
-    if(searchValue === ""){setShowSearch([])}
-      
-  return () => mounted = false;
-  }, [searchValue])
-  
+        return searchedBook;
+      });
+      setShowSearch(booksWithShelves);
+    };
 
-  return(
-     <div className="search-books">
-       <div className="search-books-bar">
-         <Link to="/" className="close-search">
-           Close
-         </Link>
-         <div className="search-books-input-wrapper">
+    if (searchValue !== "") {
+      searchAPI();
+    }
+
+    if (searchValue === "") {
+      setShowSearch([]);
+    }
+  }, [searchValue, books]);
+
+  return (
+    <div className="search-books">
+      <div className="search-books-bar">
+        <Link to="/" className="close-search">
+          Close
+        </Link>
+        <div className="search-books-input-wrapper">
           <input
             type="text"
             placeholder="Search by title, author, or ISBN"
@@ -48,25 +55,24 @@ const Search = ({deleteBook, books, updateBooks, updateCurrentlyReading, updateW
         </div>
       </div>
       <div className="search-books-results">
-         <ol className="books-grid">
-          {showSearch.length>0 ? showSearch.map((book) => 
-          <Book 
-          book={book}
-          key={book.id}
-          title={book.title} 
-          authors={book.authors} 
-          image={book.imageLinks.thumbnail}
-          //currentShelf={currentShelf}
-          //updateCurrentShelf={updateCurrentShelf}
-          updateBooks={() => updateBooks(book)}
-          books={books}
-          deleteBook={deleteBook}
-          updateCurrentlyReading={updateCurrentlyReading}
-          updateWantToRead={updateWantToRead}
-          updateRead={updateRead}/>) : <p>No Books to show</p>}
-         </ol>
-       </div>
-     </div>
-  )
-}
+        <ol className="books-grid">
+          {showSearch.length > 0 ? (
+            showSearch.map((book) => (
+              <Book
+                book={book}
+                key={book.id}
+                title={book.title}
+                authors={book.authors}
+                image={book.imageLinks.thumbnail}
+                updateBooks={updateBooks}
+              />
+            ))
+          ) : (
+            <p>No Books to show</p>
+          )}
+        </ol>
+      </div>
+    </div>
+  );
+};
 export default Search;
