@@ -1,32 +1,22 @@
-import { useState, useEffect } from "react";
 import { update } from "../BooksAPI";
 
-const Book = ({
-  book,
-  title,
-  authors,
-  image,
-  books,
-  updateCurrentlyReading,
-  updateWantToRead,
-  updateRead,
-  updateBooks,
-  deleteBook,
-  //currentShelf,
-  //updateCurrentShelf,
-}) => {
-
-
+const Book = ({ book, title, authors, image, updateBooks }) => {
   const selectShelf = (e) => {
-    console.log(e.target.value) 
+    console.log(e.target.value);
+    console.log(book);
     const updateShelf = async function () {
-      await update(book, e.target.value)
-      console.log(book)
-      
+      await update(book, e.target.value);
+    };
+    try {
+      updateShelf();
+      const updatedBook = {
+        ...book,
+        shelf: e.target.value,
+      };
+      updateBooks(updatedBook);
+    } catch (err) {
+      console.error(err);
     }
-    updateShelf()
-    updateBooks(book)
-    console.log(book)
   };
 
   return (
