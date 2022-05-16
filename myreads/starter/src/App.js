@@ -1,13 +1,12 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import { Route, Routes} from "react-router-dom";
-import { getAll, update } from "./BooksAPI";
+import { Route, Routes } from "react-router-dom";
+import { getAll } from "./BooksAPI";
 import Shelves from "./Views/Shelves";
 import Search from "./Views/Search";
 
 function App() {
-  
-  const [books, setBooks] = useState([])
+  const [books, setBooks] = useState([]);
   const [currentlyReading, setCurrentlyReading] = useState([]);
   const [wantToRead, setWantToRead] = useState([]);
   const [read, setRead] = useState([]);
@@ -27,75 +26,31 @@ function App() {
       books.filter((book) => book.shelf === "currentlyReading")
     );
     setWantToRead(books.filter((book) => book.shelf === "wantToRead"));
-  }, [books]);
+  }, [books, books.length]);
 
   function updateBooks(book) {
-    console.log("updateBooks:",books)
-    setBooks(books.filter((b) => b.id !== book.id))
-    setBooks([...books, book])
+    setBooks([...books.filter((b) => b.id !== book.id), book]);
   }
-
-  /*function updateCurrentlyReading(value) {
-    if(read.filter(value => value.key)){deleteBook(value, "read")}
-    if(wantToRead.filter(value => value.key)){deleteBook(value, "wantToRead")}
-    if(currentlyReading.filter(value => value.key)){deleteBook(value, "currentlyReading")}
-    setCurrentlyReading([...currentlyReading, value])
-  };
- 
-  function updateWantToRead(value) {
-    if(read.filter(value => value.key)){deleteBook(value, "read")}
-    if(wantToRead.filter(value => value.key)){deleteBook(value, "wantToRead")}
-    if(currentlyReading.filter(value => value.key)){deleteBook(value, "currentlyReading")}
-    setWantToRead([...wantToRead, value])
-  };
- 
-  function updateRead(value) {
-    if(read.filter(value => value.key)){deleteBook(value, "read")}
-    if(wantToRead.filter(value => value.key)){deleteBook(value, "wantToRead")}
-    if(currentlyReading.filter(value => value.key)){deleteBook(value, "currentlyReading")}
-    setRead([...read, value])
-  };
-
-  
-  function deleteBook(book, shelf) {
-    if(shelf === "currentlyReading"){
-      setCurrentlyReading(currentlyReading.filter(item => item.key !== book.key))
-    }
-    if(shelf === "wantToRead") {
-      setWantToRead(wantToRead.filter(item => item.key !== book.key))
-    }
-    if(shelf === "read") {
-      setRead(read.filter(item => item.key !== book.key))
-    }
-  };*/
-
 
   return (
     <Routes>
-      <Route exact path="/" element={
-        <Shelves 
-        //deleteBook={deleteBook}
-        //currentShelf={currentShelf}
-        //updateCurrentShelf={updateCurrentShelf}
-        updateBooks={updateBooks}
-        books={books}
-        //updateCurrentlyReading={updateCurrentlyReading}
-        currentlyReading={currentlyReading}
-        //updateWantToRead={updateWantToRead}
-        wantToRead={wantToRead} 
-        //updateRead={updateRead}
-        read={read} />} />
-      <Route path="/search" element={
-        <Search         
-        //deleteBook={deleteBook}
-        //currentShelf={currentShelf}
-        //updateCurrentShelf={updateCurrentShelf}
-        updateBooks={updateBooks}
-        books={books}
-        //updateCurrentlyReading={updateCurrentlyReading}
-        //updateWantToRead={updateWantToRead}
-        //updateRead={updateRead}
-        />} />
+      <Route
+        exact
+        path="/"
+        element={
+          <Shelves
+            updateBooks={updateBooks}
+            books={books}
+            currentlyReading={currentlyReading}
+            wantToRead={wantToRead}
+            read={read}
+          />
+        }
+      />
+      <Route
+        path="/search"
+        element={<Search updateBooks={updateBooks} books={books} />}
+      />
     </Routes>
   );
 }
