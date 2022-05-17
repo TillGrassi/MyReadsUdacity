@@ -13,11 +13,13 @@ const Search = ({ books, updateBooks }) => {
 
   useEffect(() => {
     const searchAPI = async () => {
-      const response = await search(searchValue, 20);
+      const responseRaw = await search(searchValue, 20);
+      const response = await responseRaw.filter((book) => book.imageLinks !== undefined);
 
       if (response.error) return setShowSearch([]);
 
       const booksWithShelves = response.map((searchedBook) => {
+        
         const savedBook = books.find((book) => book.id === searchedBook.id);
         if (savedBook) {
           return {
